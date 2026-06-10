@@ -1,0 +1,49 @@
+### Health
+GET http://127.0.0.1:8000/health
+
+### Start trip
+POST http://127.0.0.1:8000/api/drive/trips/start
+Content-Type: application/json
+
+{
+  "deviceId": "car-pi"
+}
+
+### Send moving location
+POST http://127.0.0.1:8000/api/drive/location
+Content-Type: application/json
+
+{
+  "deviceId": "car-pi",
+  "timestamp": "2026-06-07T14:20:00Z",
+  "lat": 57.7089,
+  "lon": 11.9746,
+  "speedKmh": 82,
+  "heading": 142,
+  "accuracyMeters": 8,
+  "source": "simulated"
+}
+
+### Send stopped location
+POST http://127.0.0.1:8000/api/drive/location
+Content-Type: application/json
+
+{
+  "deviceId": "car-pi",
+  "timestamp": "2026-06-07T14:25:00Z",
+  "lat": 57.7101,
+  "lon": 11.9758,
+  "speedKmh": 0,
+  "heading": 142,
+  "accuracyMeters": 8,
+  "source": "simulated"
+}
+
+### Current state
+GET http://127.0.0.1:8000/api/drive/state
+
+### Suggestion placeholder
+POST http://127.0.0.1:8000/api/drive/suggest
+
+### Stop trip
+POST http://127.0.0.1:8000/api/drive/trips/stop
