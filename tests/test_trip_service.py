@@ -9,6 +9,8 @@ from hermes_drive.domain import MovementStatus, TripService, VehicleLocation
 def make_location(timestamp: datetime, speed_kmh: Optional[float]) -> VehicleLocation:
     return VehicleLocation(
         device_id="car-pi",
+        subject_id="default",
+        vehicle_id="default",
         timestamp=timestamp,
         latitude=57.7089,
         longitude=11.9746,
@@ -18,10 +20,12 @@ def make_location(timestamp: datetime, speed_kmh: Optional[float]) -> VehicleLoc
 
 
 def test_start_and_stop_trip_sets_active_trip_id() -> None:
-    service = TripService()
+    service = TripService(subject_id="danne", vehicle_id="car")
 
     started = service.start_trip("car-pi", datetime(2026, 6, 7, 12, tzinfo=timezone.utc))
     assert started.active_trip_id is not None
+    assert started.subject_id == "danne"
+    assert started.vehicle_id == "car"
     assert started.device_id == "car-pi"
 
     stopped = service.stop_trip(datetime(2026, 6, 7, 13, tzinfo=timezone.utc))

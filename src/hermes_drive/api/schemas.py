@@ -5,11 +5,19 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from hermes_drive.domain.models import MovementStatus, TripState, VehicleLocation
+from hermes_drive.domain.models import (
+    DEFAULT_SUBJECT_ID,
+    DEFAULT_VEHICLE_ID,
+    MovementStatus,
+    TripState,
+    VehicleLocation,
+)
 
 
 class LocationIn(BaseModel):
     device_id: str = Field(alias="deviceId", min_length=1)
+    subject_id: str = Field(default=DEFAULT_SUBJECT_ID, alias="subjectId", min_length=1)
+    vehicle_id: str = Field(default=DEFAULT_VEHICLE_ID, alias="vehicleId", min_length=1)
     timestamp: datetime
     lat: float = Field(ge=-90, le=90)
     lon: float = Field(ge=-180, le=180)
@@ -21,6 +29,8 @@ class LocationIn(BaseModel):
     def to_domain(self) -> VehicleLocation:
         return VehicleLocation(
             device_id=self.device_id,
+            subject_id=self.subject_id,
+            vehicle_id=self.vehicle_id,
             timestamp=self.timestamp,
             latitude=self.lat,
             longitude=self.lon,
@@ -33,10 +43,14 @@ class LocationIn(BaseModel):
 
 class TripStartIn(BaseModel):
     device_id: str = Field(alias="deviceId", min_length=1)
+    subject_id: str = Field(default=DEFAULT_SUBJECT_ID, alias="subjectId", min_length=1)
+    vehicle_id: str = Field(default=DEFAULT_VEHICLE_ID, alias="vehicleId", min_length=1)
 
 
 class LocationOut(BaseModel):
     device_id: str = Field(serialization_alias="deviceId")
+    subject_id: str = Field(serialization_alias="subjectId")
+    vehicle_id: str = Field(serialization_alias="vehicleId")
     timestamp: datetime
     lat: float
     lon: float
@@ -51,6 +65,8 @@ class LocationOut(BaseModel):
     def from_domain(cls, location: VehicleLocation) -> LocationOut:
         return cls(
             device_id=location.device_id,
+            subject_id=location.subject_id,
+            vehicle_id=location.vehicle_id,
             timestamp=location.timestamp,
             lat=location.latitude,
             lon=location.longitude,
@@ -62,6 +78,8 @@ class LocationOut(BaseModel):
 
 
 class TripStateOut(BaseModel):
+    subject_id: str = Field(serialization_alias="subjectId")
+    vehicle_id: str = Field(serialization_alias="vehicleId")
     device_id: Optional[str] = Field(serialization_alias="deviceId")
     active_trip_id: Optional[str] = Field(serialization_alias="activeTripId")
     latest_location: Optional[LocationOut] = Field(serialization_alias="latestLocation")
@@ -79,6 +97,8 @@ class TripStateOut(BaseModel):
     def from_domain(cls, state: TripState) -> TripStateOut:
         return cls(
             device_id=state.device_id,
+            subject_id=state.subject_id,
+            vehicle_id=state.vehicle_id,
             active_trip_id=state.active_trip_id,
             latest_location=LocationOut.from_domain(state.latest_location)
             if state.latest_location
@@ -94,6 +114,8 @@ class TripStateOut(BaseModel):
 
 
 class SuggestionOut(BaseModel):
+    subject_id: str = Field(serialization_alias="subjectId")
+    vehicle_id: str = Field(serialization_alias="vehicleId")
     message: str
     movement_status: MovementStatus = Field(serialization_alias="movementStatus")
     active_trip_id: Optional[str] = Field(serialization_alias="activeTripId")

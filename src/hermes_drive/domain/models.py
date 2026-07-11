@@ -6,6 +6,9 @@ from enum import Enum
 from typing import Optional
 from uuid import uuid4
 
+DEFAULT_SUBJECT_ID = "default"
+DEFAULT_VEHICLE_ID = "default"
+
 
 class MovementStatus(str, Enum):
     UNKNOWN = "unknown"
@@ -16,6 +19,8 @@ class MovementStatus(str, Enum):
 @dataclass(frozen=True)
 class VehicleLocation:
     device_id: str
+    subject_id: str
+    vehicle_id: str
     timestamp: datetime
     latitude: float
     longitude: float
@@ -29,6 +34,8 @@ class VehicleLocation:
 class TripSession:
     id: str
     device_id: str
+    subject_id: str
+    vehicle_id: str
     started_at: datetime
     ended_at: Optional[datetime] = None
     status: str = "active"
@@ -36,6 +43,8 @@ class TripSession:
 
 @dataclass
 class TripState:
+    subject_id: str = DEFAULT_SUBJECT_ID
+    vehicle_id: str = DEFAULT_VEHICLE_ID
     device_id: Optional[str] = None
     active_trip_id: Optional[str] = None
     latest_location: Optional[VehicleLocation] = None
@@ -48,9 +57,16 @@ class TripState:
     latest_update_at: Optional[datetime] = None
 
 
-def new_trip_session(device_id: str, started_at: Optional[datetime] = None) -> TripSession:
+def new_trip_session(
+    device_id: str,
+    subject_id: str,
+    vehicle_id: str,
+    started_at: Optional[datetime] = None,
+) -> TripSession:
     return TripSession(
         id=str(uuid4()),
         device_id=device_id,
+        subject_id=subject_id,
+        vehicle_id=vehicle_id,
         started_at=started_at or datetime.now(timezone.utc),
     )

@@ -8,6 +8,8 @@ source.
 Fields:
 
 - `device_id`
+- `subject_id`
+- `vehicle_id`
 - `timestamp`
 - `latitude`
 - `longitude`
@@ -22,6 +24,8 @@ The current known state for the vehicle and active trip.
 
 Fields:
 
+- `subject_id`
+- `vehicle_id`
 - `device_id`
 - `active_trip_id`
 - `latest_location`

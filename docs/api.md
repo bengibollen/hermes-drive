@@ -15,6 +15,8 @@ Receives a vehicle location update and returns current trip state.
 ```json
 {
   "deviceId": "car-pi",
+  "subjectId": "default",
+  "vehicleId": "default",
   "timestamp": "2026-06-07T14:20:00Z",
   "lat": 57.7089,
   "lon": 11.9746,
@@ -27,6 +29,9 @@ Receives a vehicle location update and returns current trip state.
 
 Validation:
 
+- `deviceId` is required.
+- `subjectId` is optional and defaults to `default`.
+- `vehicleId` is optional and defaults to `default`.
 - `lat` must be between -90 and 90.
 - `lon` must be between -180 and 180.
 - `speedKmh`, `heading`, and `accuracyMeters` are optional.
@@ -37,13 +42,20 @@ Validation:
 Returns the current known vehicle/trip state. This works before any location has
 been received.
 
+Optional query parameters:
+
+- `subjectId`, default `default`
+- `vehicleId`, default `default`
+
 ### `POST /api/drive/trips/start`
 
 Starts a trip session.
 
 ```json
 {
-  "deviceId": "car-pi"
+  "deviceId": "car-pi",
+  "subjectId": "default",
+  "vehicleId": "default"
 }
 ```
 
@@ -51,7 +63,17 @@ Starts a trip session.
 
 Stops the current active trip session if one exists.
 
+Optional query parameters:
+
+- `subjectId`, default `default`
+- `vehicleId`, default `default`
+
 ### `POST /api/drive/suggest`
 
 Placeholder endpoint for future Hermes suggestions. It currently returns a
 deterministic message based on active trip and movement state.
+
+Optional query parameters:
+
+- `subjectId`, default `default`
+- `vehicleId`, default `default`

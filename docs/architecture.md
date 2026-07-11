@@ -23,12 +23,13 @@ tests/        Unit and API tests
 
 1. A client posts a location update to `POST /api/drive/location`.
 2. Pydantic validates the payload and converts it to a domain model.
-3. `TripService` infers movement from speed:
+3. The in-memory store chooses a trip context by `subjectId` and `vehicleId`.
+4. `TripService` infers movement from speed:
    - no speed: `unknown`
    - speed below 5 km/h: `stopped`
    - speed at or above 5 km/h: `moving`
-4. The current state is updated in memory.
-5. The API returns the current trip state.
+5. The current state is updated in memory.
+6. The API returns the current trip state.
 
 ## Non-Goals For This Slice
 

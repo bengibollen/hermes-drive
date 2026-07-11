@@ -10,7 +10,7 @@ for receiving vehicle telemetry and exposing current trip context.
 
 - Receive location updates from Raspberry Pi, simulator, or another source
 - Store latest vehicle position in memory
-- Track active trip state
+- Track active trip state by subject and vehicle
 - Infer moving/stopped/unknown from speed
 - Provide API endpoints for Hermes and development clients
 - Include a simulator while GPS hardware is not ready

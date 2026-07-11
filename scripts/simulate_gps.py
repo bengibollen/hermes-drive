@@ -11,6 +11,8 @@ def build_payload(index: int) -> dict[str, object]:
     speed_kmh = 72 if index < 6 else 0
     return {
         "deviceId": "car-pi",
+        "subjectId": "default",
+        "vehicleId": "default",
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "lat": 57.7089 + index * 0.001,
         "lon": 11.9746 + index * 0.001,

@@ -10,6 +10,8 @@ from hermes_drive.domain.movement import infer_movement_status
 def location_with_speed(speed_kmh: Optional[float]) -> VehicleLocation:
     return VehicleLocation(
         device_id="car-pi",
+        subject_id="default",
+        vehicle_id="default",
         timestamp=datetime(2026, 6, 7, 14, 20, tzinfo=timezone.utc),
         latitude=57.7089,
         longitude=11.9746,

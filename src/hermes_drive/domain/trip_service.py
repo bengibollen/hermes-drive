@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from hermes_drive.domain.models import (
+    DEFAULT_SUBJECT_ID,
+    DEFAULT_VEHICLE_ID,
     MovementStatus,
     TripSession,
     TripState,
@@ -14,8 +16,12 @@ from hermes_drive.domain.movement import infer_movement_status
 
 
 class TripService:
-    def __init__(self) -> None:
-        self._state = TripState()
+    def __init__(
+        self,
+        subject_id: str = DEFAULT_SUBJECT_ID,
+        vehicle_id: str = DEFAULT_VEHICLE_ID,
+    ) -> None:
+        self._state = TripState(subject_id=subject_id, vehicle_id=vehicle_id)
         self._active_trip: Optional[TripSession] = None
         self._completed_trips: list[TripSession] = []
 
@@ -25,7 +31,12 @@ class TripService:
 
     def start_trip(self, device_id: str, started_at: Optional[datetime] = None) -> TripState:
         started_at = started_at or datetime.now(timezone.utc)
-        self._active_trip = new_trip_session(device_id=device_id, started_at=started_at)
+        self._active_trip = new_trip_session(
+            device_id=device_id,
+            subject_id=self._state.subject_id,
+            vehicle_id=self._state.vehicle_id,
+            started_at=started_at,
+        )
         self._state.device_id = device_id
         self._state.active_trip_id = self._active_trip.id
         self._state.trip_started_at = self._active_trip.started_at
