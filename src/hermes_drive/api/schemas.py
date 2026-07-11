@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel, Field
@@ -119,5 +120,29 @@ class SuggestionOut(BaseModel):
     message: str
     movement_status: MovementStatus = Field(serialization_alias="movementStatus")
     active_trip_id: Optional[str] = Field(serialization_alias="activeTripId")
+
+    model_config = {"populate_by_name": True}
+
+
+class DriveIntent(str, Enum):
+    FOOD = "food"
+    PARKING = "parking"
+
+
+class ResponseMode(str, Enum):
+    JSON = "json"
+    TEXT = "text"
+    SPEECH = "speech"
+
+
+class DriveIntentOut(BaseModel):
+    subject_id: str = Field(serialization_alias="subjectId")
+    vehicle_id: str = Field(serialization_alias="vehicleId")
+    intent: DriveIntent
+    message: str
+    movement_status: MovementStatus = Field(serialization_alias="movementStatus")
+    active_trip_id: Optional[str] = Field(serialization_alias="activeTripId")
+    has_recent_location: bool = Field(serialization_alias="hasRecentLocation")
+    speech_supported: bool = Field(serialization_alias="speechSupported")
 
     model_config = {"populate_by_name": True}

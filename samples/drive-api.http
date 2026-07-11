@@ -54,5 +54,49 @@ GET http://127.0.0.1:8000/api/drive/state?subjectId=danne&vehicleId=car
 ### Suggestion placeholder
 POST http://127.0.0.1:8000/api/drive/suggest
 
+### Food request as JSON
+POST http://127.0.0.1:8000/api/drive/food?subjectId=default&vehicleId=default&responseMode=json
+
+{
+  "deviceId": "car-pi",
+  "subjectId": "default",
+  "vehicleId": "default",
+  "timestamp": "2026-06-07T14:20:00Z",
+  "lat": 57.7089,
+  "lon": 11.9746,
+  "speedKmh": 82,
+  "heading": 142,
+  "accuracyMeters": 8,
+  "source": "gpsd"
+}
+
+### Food request as text
+POST http://127.0.0.1:8000/api/drive/food?responseMode=text
+
+### Food request as speech placeholder
+POST http://127.0.0.1:8000/api/drive/food?responseMode=speech
+
+### Parking/rest request as JSON
+POST http://127.0.0.1:8000/api/drive/parking?subjectId=default&vehicleId=default&responseMode=json
+
+{
+  "deviceId": "car-pi",
+  "subjectId": "default",
+  "vehicleId": "default",
+  "timestamp": "2026-06-07T14:20:00Z",
+  "lat": 57.7089,
+  "lon": 11.9746,
+  "speedKmh": 82,
+  "heading": 142,
+  "accuracyMeters": 8,
+  "source": "gpsd"
+}
+
+### Parking/rest request as text
+POST http://127.0.0.1:8000/api/drive/parking?responseMode=text
+
+### Parking/rest request as speech placeholder
+POST http://127.0.0.1:8000/api/drive/parking?responseMode=speech
+
 ### Stop trip
 POST http://127.0.0.1:8000/api/drive/trips/stop

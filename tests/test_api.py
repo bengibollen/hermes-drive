@@ -95,3 +95,66 @@ def test_tracks_state_by_subject_and_vehicle() -> None:
     assert car_state["movementStatus"] == "moving"
     assert phone_state["latestLocation"]["deviceId"] == "iphone-danne"
     assert phone_state["movementStatus"] == "stopped"
+
+
+def test_food_endpoint_returns_json_response() -> None:
+    client = TestClient(create_app())
+    payload = {
+        "deviceId": "car-pi",
+        "subjectId": "danne",
+        "vehicleId": "car",
+        "timestamp": "2026-06-07T14:20:00Z",
+        "lat": 57.7089,
+        "lon": 11.9746,
+        "speedKmh": 82,
+        "heading": 142,
+        "accuracyMeters": 8,
+        "source": "gpsd",
+    }
+
+    response = client.post(
+        "/api/drive/food",
+        params={"subjectId": "danne", "vehicleId": "car"},
+        json=payload,
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["intent"] == "food"
+    assert body["subjectId"] == "danne"
+    assert body["vehicleId"] == "car"
+    assert body["movementStatus"] == "moving"
+    assert body["hasRecentLocation"] is True
+    assert body["speechSupported"] is False
+    assert "Food request noted" in body["message"]
+
+    state = client.get(
+        "/api/drive/state",
+        params={"subjectId": "danne", "vehicleId": "car"},
+    ).json()
+    assert state["latestLocation"]["deviceId"] == "car-pi"
+    assert state["latestLocation"]["heading"] == 142
+
+
+def test_parking_endpoint_can_return_text_response() -> None:
+    client = TestClient(create_app())
+
+    response = client.post("/api/drive/parking", params={"responseMode": "text"})
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/plain")
+    assert response.text == (
+        "I do not have a recent location yet, so I cannot suggest parking or a rest stop."
+    )
+
+
+def test_speech_response_mode_is_explicitly_not_implemented() -> None:
+    client = TestClient(create_app())
+
+    response = client.post("/api/drive/food", params={"responseMode": "speech"})
+
+    assert response.status_code == 501
+    body = response.json()
+    assert body["intent"] == "food"
+    assert body["speechSupported"] is False
+    assert "Speech responses are not implemented yet" in body["message"]

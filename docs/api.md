@@ -77,3 +77,75 @@ Optional query parameters:
 
 - `subjectId`, default `default`
 - `vehicleId`, default `default`
+
+### `POST /api/drive/food`
+
+Records that the user is hungry and returns a deterministic response for the
+client. This does not perform real place search yet.
+
+The request body is optional. If present, it uses the same shape as
+`POST /api/drive/location` and is ingested before the food response is built.
+This lets a Pi button press send current position and direction in one call.
+
+Optional query parameters:
+
+- `subjectId`, default `default`
+- `vehicleId`, default `default`
+- `responseMode`, default `json`
+
+Supported `responseMode` values:
+
+- `json`: returns structured JSON.
+- `text`: returns `text/plain`.
+- `speech`: reserved for future speech output and currently returns `501 Not Implemented`.
+
+Example:
+
+```http
+POST /api/drive/food?subjectId=danne&vehicleId=car&responseMode=json
+```
+
+Example with current position:
+
+```json
+{
+  "deviceId": "car-pi",
+  "subjectId": "danne",
+  "vehicleId": "car",
+  "timestamp": "2026-06-07T14:20:00Z",
+  "lat": 57.7089,
+  "lon": 11.9746,
+  "speedKmh": 82,
+  "heading": 142,
+  "accuracyMeters": 8,
+  "source": "gpsd"
+}
+```
+
+### `POST /api/drive/parking`
+
+Records that the user needs parking or a rest stop and returns a deterministic
+response for the client. This does not perform real place search yet.
+
+The request body is optional. If present, it uses the same shape as
+`POST /api/drive/location` and is ingested before the parking/rest response is
+built. This lets a Pi button press send current position and direction in one
+call.
+
+Optional query parameters:
+
+- `subjectId`, default `default`
+- `vehicleId`, default `default`
+- `responseMode`, default `json`
+
+Supported `responseMode` values:
+
+- `json`: returns structured JSON.
+- `text`: returns `text/plain`.
+- `speech`: reserved for future speech output and currently returns `501 Not Implemented`.
+
+Example:
+
+```http
+POST /api/drive/parking?subjectId=danne&vehicleId=car&responseMode=text
+```
